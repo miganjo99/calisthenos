@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Tabla de Usuarios
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String        // Aquí guardaremos la contraseña encriptada
+  name         String
+  avatarUrl    String?       // Aquí guardaremos la URL de la foto aleatoria
+  daysTrained  Int           @default(0) // Contador de días entrenados
+  reservations Reservation[] // Relación: Un usuario tiene muchas reservas
+  createdAt    DateTime      @default(now())
+}
+
+// 2. Tabla de Tipos de Entrenamiento (Empuje, Tirón, Full body...)
+model Training {
+  id          String     @id @default(uuid())
+  name        String     // Ej: "Empuje + pierna"
+  description String?
+  exercises   Exercise[] // Relación: Un entrenamiento tiene muchos ejercicios
+  classes     Class[]    // Relación: Un entrenamiento se da en muchas clases
+}
+
+// 3. Tabla de Ejercicios
+model Exercise {
+  id         String    @id @default(uuid())
+  name       String    // Ej: "Dominadas pronas"
+  trainingId String
+  training   Training  @relation(fields: [trainingId], references: [id])
+}
+
+// 4. Tabla de Clases (Los horarios disponibles)
+model Class {
+  id           String        @id @default(uuid())
+  date         DateTime      // Fecha y hora de la clase
+  capacity     Int           @default(15) // Capacidad máxima por defecto
+  trainingId   String
+  training     Training      @relation(fields: [trainingId], references: [id])
+  reservations Reservation[] // Lista de usuarios inscritos (reservas)
+}
+
+// 5. Tabla de Reservas (La relación entre Usuarios y Clases)
+model Reservation {
+  id        String   @id @default(uuid())
+  userId    String
+  classId   String
+  user      User     @relation(fields: [userId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id])
+  createdAt DateTime @default(now())
+
+  // Esto evita que un mismo usuario reserve la misma clase dos veces
+  @@unique([userId, classId]) 
+}

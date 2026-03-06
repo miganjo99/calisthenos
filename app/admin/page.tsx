@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         
         <div className="bg-black text-white p-8 rounded-xl shadow-lg flex justify-between items-center">
           <div>
@@ -53,23 +53,31 @@ export default async function AdminDashboard() {
         {/* Menú de Gestión */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Gestión del Gimnasio</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Ajustamos el grid a 3 columnas para que quepan las 3 tarjetas perfectas */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             
-            {/* Estos enlaces los iremos creando paso a paso */}
             <Link href="/admin/clases" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
               <div>
                 <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Gestionar Clases</h3>
-                <p className="text-sm text-gray-500">Modifica horarios, capacidades o cancela clases.</p>
+                <p className="text-sm text-gray-500">Modifica horarios y aforos.</p>
               </div>
-              <span className="text-2xl">📅</span>
+              <span className="text-3xl">📅</span>
             </Link>
 
             <Link href="/admin/entrenamientos" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
               <div>
                 <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Tipos de Entrenamiento</h3>
-                <p className="text-sm text-gray-500">Añade nuevos ejercicios y rutinas.</p>
+                <p className="text-sm text-gray-500">Añade rutinas al Open Gym.</p>
               </div>
-              <span className="text-2xl">💪</span>
+              <span className="text-3xl">💪</span>
+            </Link>
+
+            <Link href="/admin/usuarios" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
+              <div>
+                <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Gestión de Clientes</h3>
+                <p className="text-sm text-gray-500">Controla el acceso (Altas y Bajas).</p>
+              </div>
+              <span className="text-3xl">👥</span>
             </Link>
 
           </div>

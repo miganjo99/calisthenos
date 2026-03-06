@@ -22,6 +22,7 @@ model User {
   avatarUrl    String?       // Aquí guardaremos la URL de la foto aleatoria
   daysTrained  Int           @default(0) // Contador de días entrenados
   role         String        @default("user")
+  isActive     Boolean       @default(true)
   reservations Reservation[] // Relación: Un usuario tiene muchas reservas
   createdAt    DateTime      @default(now())
 }

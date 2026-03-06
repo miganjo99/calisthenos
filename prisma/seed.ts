@@ -37,7 +37,6 @@ async function main() {
     data: {
       date: manana,
       capacity: 15,
-      trainingId: creados[2].id // Full body
     }
   })
 
@@ -45,7 +44,6 @@ async function main() {
     data: {
       date: pasado,
       capacity: 15,
-      trainingId: creados[0].id // Empuje + pierna
     }
   })
 

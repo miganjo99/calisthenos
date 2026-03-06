@@ -21,46 +21,34 @@ model User {
   name         String
   avatarUrl    String?       // Aquí guardaremos la URL de la foto aleatoria
   daysTrained  Int           @default(0) // Contador de días entrenados
+  role         String        @default("user")
   reservations Reservation[] // Relación: Un usuario tiene muchas reservas
   createdAt    DateTime      @default(now())
 }
 
-// 2. Tabla de Tipos de Entrenamiento (Empuje, Tirón, Full body...)
-model Training {
-  id          String     @id @default(uuid())
-  name        String     // Ej: "Empuje + pierna"
-  description String?
-  exercises   Exercise[] // Relación: Un entrenamiento tiene muchos ejercicios
-  classes     Class[]    // Relación: Un entrenamiento se da en muchas clases
-}
-
-// 3. Tabla de Ejercicios
-model Exercise {
-  id         String    @id @default(uuid())
-  name       String    // Ej: "Dominadas pronas"
-  trainingId String
-  training   Training  @relation(fields: [trainingId], references: [id])
-}
-
-// 4. Tabla de Clases (Los horarios disponibles)
 model Class {
   id           String        @id @default(uuid())
-  date         DateTime      // Fecha y hora de la clase
-  capacity     Int           @default(15) // Capacidad máxima por defecto
-  trainingId   String
-  training     Training      @relation(fields: [trainingId], references: [id])
-  reservations Reservation[] // Lista de usuarios inscritos (reservas)
+  date         DateTime
+  capacity     Int
+  reservations Reservation[]
 }
 
-// 5. Tabla de Reservas (La relación entre Usuarios y Clases)
 model Reservation {
-  id        String   @id @default(uuid())
-  userId    String
-  classId   String
-  user      User     @relation(fields: [userId], references: [id])
-  class     Class    @relation(fields: [classId], references: [id])
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  userId     String
+  classId    String
+  trainingId String   // <-- ¡NUEVO! El usuario elige su rutina
+  createdAt  DateTime @default(now())
 
-  // Esto evita que un mismo usuario reserve la misma clase dos veces
-  @@unique([userId, classId]) 
+  user       User     @relation(fields: [userId], references: [id])
+  class      Class    @relation(fields: [classId], references: [id])
+  training   Training @relation(fields: [trainingId], references: [id]) 
+}
+
+model Training {
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  exercises    String[]      @default([])
+  reservations Reservation[] 
 }

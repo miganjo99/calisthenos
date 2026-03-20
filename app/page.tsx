@@ -39,6 +39,9 @@ export default async function Home() {
                 <Link href="/clases" className="w-full sm:w-auto bg-white/10 text-white border border-white/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition">
                   Ver Horarios
                 </Link>
+                <Link href="/ranking" className="w-full sm:w-auto bg-transparent text-gray-300 hover:text-white px-8 py-4 font-bold text-lg transition underline decoration-gray-500 underline-offset-4">
+                  Ranking de Atletas
+                </Link>
               </>
             )}
           </div>

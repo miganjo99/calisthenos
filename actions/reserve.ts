@@ -3,8 +3,9 @@
 import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
+import { pusherServer } from "@/lib/pusher"
 
-// 1. FUNCIÓN PARA RESERVAR (Ahora recibe la clase y el entrenamiento elegido)
+
 export async function reserveClass(classId: string, trainingId: string) {
   const session = await auth()
   if (!session?.user?.email) return { error: "No estás autenticado" }
@@ -37,6 +38,17 @@ export async function reserveClass(classId: string, trainingId: string) {
       trainingId: trainingId
     }
   })
+
+  try {
+    const training = await prisma.training.findUnique({ where: { id: trainingId } })
+    const firstName = user.name.split(' ')[0] 
+
+    await pusherServer.trigger('gym-activity', 'new-reservation', {
+      message: `🔥 ¡${firstName} acaba de coger plaza para hacer ${training?.name}!`,
+    })
+  } catch (error) {
+    console.error("Error enviando notificación de Pusher:", error)
+  }
 
   revalidatePath('/clases')
   revalidatePath('/dashboard')

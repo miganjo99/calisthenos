@@ -1,49 +1,42 @@
-'use server'
-
-import Stripe from 'stripe'
-import { auth } from '@/auth'
-import prisma from '@/lib/prisma'
-import { redirect } from 'next/navigation'
+import { headers } from "next/headers"
+import { NextRequest, NextResponse } from "next/server" 
+import Stripe from "stripe"
+import prisma from "@/lib/prisma"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover', 
+  apiVersion: "2026-02-25.clover",
 })
 
-export async function createCheckoutSession(formData: FormData) {
-  const session = await auth()
-  
-  if (!session?.user?.email) throw new Error("No estás autenticado")
+export async function POST(req: NextRequest) {
+  const body = await req.text()
+  const signature = (await headers()).get("Stripe-Signature") as string
 
-  const user = await prisma.user.findUnique({ where: { email: session.user.email } })
-  if (!user) throw new Error("Usuario no encontrado")
-
-  let checkoutUrl = "" 
+  let event: Stripe.Event
 
   try {
-    const checkoutSession = await stripe.checkout.sessions.create({
-      mode: 'subscription',
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID,
-          quantity: 1,
-        },
-      ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?canceled=true`,
-      customer_email: user.email,
-      client_reference_id: user.id, 
-    })
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET! 
+    )
+  } catch (error: any) {
+    console.error("❌ Error verificando el webhook:", error.message)
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
+  }
 
-    if (checkoutSession.url) {
-      checkoutUrl = checkoutSession.url 
+  const session = event.data.object as Stripe.Checkout.Session
+
+  if (event.type === "checkout.session.completed") {
+    const userId = session.client_reference_id
+
+    if (userId) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { isActive: true },
+      })
+      console.log(`✅ ¡Pago recibido! Usuario ${userId} activado en el gimnasio.`)
     }
-  } catch (error) {
-    console.error("Error creando sesión de Stripe:", error)
-    throw new Error("No se pudo iniciar la pasarela de pago")
   }
 
-  if (checkoutUrl) {
-    redirect(checkoutUrl)
-  }
+  return new NextResponse("Todo OK", { status: 200 })
 }

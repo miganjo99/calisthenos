@@ -5,7 +5,7 @@ import { auth } from '@/auth'
 import prisma from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy', {
   apiVersion: '2026-02-25.clover', 
 })
 

@@ -6,9 +6,8 @@ import { revalidatePath } from "next/cache"
 import { pusherServer } from "@/lib/pusher"
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy')
 
-// 1. FUNCIÓN PARA RESERVAR
 export async function reserveClass(classId: string, trainingId: string) {
   const session = await auth()
   if (!session?.user?.email) return { error: "No estás autenticado" }
@@ -27,13 +26,11 @@ export async function reserveClass(classId: string, trainingId: string) {
     return { error: "La clase está llena" }
   }
 
-  // Comprobamos si el usuario ya tiene reserva a esta hora
   const alreadyReserved = gymClass.reservations.some(res => res.userId === user.id)
   if (alreadyReserved) {
     return { error: "Ya tienes una reserva para esta hora" }
   }
 
-  // Guardamos la reserva
   await prisma.reservation.create({
     data: {
       userId: user.id,
@@ -42,12 +39,9 @@ export async function reserveClass(classId: string, trainingId: string) {
     }
   })
 
-  // --- SACAMOS LAS VARIABLES AQUÍ ARRIBA PARA QUE TODOS LAS VEAN ---
   const training = await prisma.training.findUnique({ where: { id: trainingId } })
   const firstName = user.name.split(' ')[0] 
-  // ----------------------------------------------------------------
 
-  // 1. NOTIFICACIÓN PUSHER
   try {
     await pusherServer.trigger('gym-activity', 'new-reservation', {
       message: `🔥 ¡${firstName} acaba de coger plaza para hacer ${training?.name}!`,
@@ -56,7 +50,6 @@ export async function reserveClass(classId: string, trainingId: string) {
     console.error("Error enviando notificación de Pusher:", error)
   }
 
-  // 2. EMAIL CON RESEND
   try {
     const fechaBonita = gymClass.date.toLocaleDateString('es-ES', { 
       weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
@@ -88,7 +81,6 @@ export async function reserveClass(classId: string, trainingId: string) {
   return { success: true }
 }
 
-// 2. FUNCIÓN PARA CANCELAR RESERVA
 export async function cancelReservation(reservationId: string) {
   const session = await auth()
   if (!session?.user?.email) return { error: "No estás autenticado" }

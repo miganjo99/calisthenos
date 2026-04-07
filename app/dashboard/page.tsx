@@ -19,7 +19,7 @@ export default async function DashboardPage() {
         },
         include: {
           class: true,     // Traemos los datos de la clase (la hora)
-          training: true   // <-- AHORA EL ENTRENAMIENTO CUELGA DIRECTAMENTE DE LA RESERVA
+          training: true   
         },
         orderBy: {
           class: { date: 'asc' }

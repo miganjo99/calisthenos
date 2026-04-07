@@ -9,12 +9,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-02-25.clover', 
 })
 
-export async function createCheckoutSession() {
+export async function createCheckoutSession(formData: FormData) {
   const session = await auth()
-  if (!session?.user?.email) return { error: "No estás autenticado" }
+  
+  if (!session?.user?.email) throw new Error("No estás autenticado")
 
   const user = await prisma.user.findUnique({ where: { email: session.user.email } })
-  if (!user) return { error: "Usuario no encontrado" }
+  if (!user) throw new Error("Usuario no encontrado")
 
   let checkoutUrl = "" 
 
@@ -39,7 +40,7 @@ export async function createCheckoutSession() {
     }
   } catch (error) {
     console.error("Error creando sesión de Stripe:", error)
-    return { error: "No se pudo iniciar la pasarela de pago" }
+    throw new Error("No se pudo iniciar la pasarela de pago")
   }
 
   if (checkoutUrl) {

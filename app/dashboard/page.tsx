@@ -2,23 +2,22 @@ import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
 import prisma from "@/lib/prisma"
 import { cancelReservation } from "@/actions/reserve"
-
+import SessionRefresher from "@/components/SessionRefresher"
 export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.email) redirect("/login")
 
-  // 1. Buscamos al usuario Y SUS RESERVAS FUTURAS
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
       reservations: {
         where: {
           class: {
-            date: { gte: new Date() } // Solo clases de hoy en adelante
+            date: { gte: new Date() } 
           }
         },
         include: {
-          class: true,     // Traemos los datos de la clase (la hora)
+          class: true,     
           training: true   
         },
         orderBy: {
@@ -37,6 +36,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <SessionRefresher />
       <div className="max-w-4xl mx-auto space-y-6">
         
         {/* Cabecera del Perfil */}
@@ -81,7 +81,6 @@ export default async function DashboardPage() {
           {user.reservations.length > 0 ? (
             <div className="space-y-4">
               {user.reservations.map((res) => {
-                // Truco Fullstack: Envolvemos la acción para que TypeScript no se queje
                 const cancelAction = async () => {
                   "use server"
                   await cancelReservation(res.id)
@@ -90,7 +89,6 @@ export default async function DashboardPage() {
                 return (
                   <div key={res.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-gray-200 rounded-lg">
                     <div>
-                      {/* AHORA LEEMOS res.training.name en lugar de res.class.training.name */}
                       <p className="font-bold text-lg">{res.training.name}</p>
                       <p className="text-gray-600">
                         {res.class.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las {res.class.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}

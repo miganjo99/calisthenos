@@ -12,7 +12,6 @@ export async function registerUser(formData: FormData) {
     return { error: 'Todos los campos son obligatorios' }
   }
 
-  // 1. Comprobar si el usuario ya existe
   const existingUser = await prisma.user.findUnique({
     where: { email }
   })
@@ -21,13 +20,10 @@ export async function registerUser(formData: FormData) {
     return { error: 'Este email ya está registrado' }
   }
 
-  // 2. Encriptar la contraseña
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  // 3. Generar un avatar aleatorio basado en el nombre (usamos DiceBear)
   const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`
 
-  // 4. Guardar en la base de datos (Neon)
   try {
     const newUser = await prisma.user.create({
       data: {

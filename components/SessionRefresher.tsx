@@ -1,10 +1,10 @@
 'use client'
 
-import { useSession } from "next-auth/react"
+import { useSession, SessionProvider } from "next-auth/react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-export default function SessionRefresher() {
+function RefresherLogic() {
   const { update } = useSession()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -12,10 +12,17 @@ export default function SessionRefresher() {
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
       update({ isActive: true })
-      
       router.replace('/dashboard')
     }
   }, [searchParams, update, router])
 
   return null 
+}
+
+export default function SessionRefresher() {
+  return (
+    <SessionProvider>
+      <RefresherLogic />
+    </SessionProvider>
+  )
 }

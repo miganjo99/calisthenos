@@ -49,7 +49,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           user.password
         )
         
+        
         if (passwordsMatch) {
+          if (user.failedAttempts && user.failedAttempts > 0) {
+            await prisma.user.update({
+              where: { email: user.email },
+              data: { failedAttempts: 0, recoveryCode: null }
+            })
+          }
+
           return {
             id: user.id,
             name: user.name,

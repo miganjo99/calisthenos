@@ -27,7 +27,7 @@ export default async function AdminClasesPage() {
 
     await prisma.class.update({
       where: { id: classId },
-      data: { capacity } // Ya no enviamos trainingId
+      data: { capacity } 
     })
 
     revalidatePath("/admin/clases")
@@ -101,7 +101,7 @@ export default async function AdminClasesPage() {
                             name="capacity" 
                             defaultValue={c.capacity} 
                             min={c.reservations.length} 
-                            className="border rounded-md p-2 w-20 text-sm text-center font-bold focus:ring-2 focus:ring-black outline-none"
+                            className="border rounded-md p-2 w-20 text-gray-500 text-center font-bold focus:ring-2 focus:ring-black outline-none"
                           />
                         </div>
 

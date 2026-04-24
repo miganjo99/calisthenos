@@ -23,6 +23,8 @@ model User {
   daysTrained  Int           @default(0) // Contador de días entrenados
   role         String        @default("user")
   isActive     Boolean       @default(true)
+  failedAttempts Int     @default(0)
+  recoveryCode   String?
   reservations Reservation[] // Relación: Un usuario tiene muchas reservas
   createdAt    DateTime      @default(now())
 }

@@ -90,7 +90,7 @@ export default async function Home() {
       </section>
 
       <footer className="bg-gray-50 border-t border-gray-200 py-12 text-center text-gray-500">
-        <p className="font-bold text-gray-800 text-lg mb-2">Cali<span className="text-blue-600">Gym</span></p>
+        <p className="font-bold text-gray-800 text-lg mb-2">Calisthenos</p>
         <p>© {new Date().getFullYear()} Todos los derechos reservados.</p>
       </footer>
 

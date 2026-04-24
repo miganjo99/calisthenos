@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
             
             <Link href="/admin/clases" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
               <div>
-                <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Gestionar Clases</h3>
+                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Gestionar Clases</h3>
                 <p className="text-sm text-gray-500">Modifica horarios y aforos.</p>
               </div>
               <span className="text-3xl">📅</span>
@@ -66,7 +66,7 @@ export default async function AdminDashboard() {
 
             <Link href="/admin/entrenamientos" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
               <div>
-                <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Tipos de Entrenamiento</h3>
+                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Tipos de Entrenamiento</h3>
                 <p className="text-sm text-gray-500">Añade rutinas al Open Gym.</p>
               </div>
               <span className="text-3xl">💪</span>
@@ -74,7 +74,7 @@ export default async function AdminDashboard() {
 
             <Link href="/admin/usuarios" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
               <div>
-                <h3 className="font-bold text-lg group-hover:text-blue-600 transition">Gestión de Clientes</h3>
+                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Gestión de Clientes</h3>
                 <p className="text-sm text-gray-500">Controla el acceso (Altas y Bajas).</p>
               </div>
               <span className="text-3xl">👥</span>

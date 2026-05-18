@@ -37,51 +37,56 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="bg-canvas text-ink py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
       <SessionRefresher />
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-section">
         
-        <div className="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        {/* Profile Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-hairline pb-section gap-6">
+          <div className="flex items-center gap-6">
             {user.avatarUrl ? (
-              <img src={user.avatarUrl} alt="Avatar" className="w-16 h-16 rounded-full bg-gray-200" />
+              <img src={user.avatarUrl} alt="Avatar" className="w-24 h-24 rounded-none bg-soft-cloud object-cover" />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-gray-300"></div>
+              <div className="w-24 h-24 rounded-none bg-soft-cloud flex items-center justify-center text-heading-xl font-display uppercase">
+                {user.name.charAt(0)}
+              </div>
             )}
             
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Hola, {user.name}</h1>
-              <p className="text-gray-500">{user.email}</p>
+              <h1 className="text-heading-xl font-display uppercase tracking-tighter">Hola, {user.name}</h1>
+              <p className="text-body-md text-charcoal">{user.email}</p>
             </div>
           </div>
 
           <form action={logout}>
-            <button type="submit" className="bg-red-50 text-red-600 px-4 py-2 rounded-lg font-medium hover:bg-red-100 transition">
+            <button type="submit" className="button-secondary text-sale">
               Cerrar sesión
             </button>
           </form>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-black">
-            <h3 className="text-lg font-semibold text-gray-700">Días Entrenados</h3>
-            <p className="text-3xl font-bold mt-2">{user.daysTrained}</p>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-sm">
+          <div className="bg-soft-cloud p-8">
+            <h3 className="text-heading-lg mb-2">Días Entrenados</h3>
+            <p className="text-display-campaign font-display uppercase">{user.daysTrained}</p>
           </div>
           
-          <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-black">
-            <h3 className="text-lg font-semibold text-gray-700">Tus Reservas Activas</h3>
-            <p className="text-3xl font-bold mt-2">{user.reservations.length}</p>
+          <div className="bg-soft-cloud p-8">
+            <h3 className="text-heading-lg mb-2">Reservas Activas</h3>
+            <p className="text-display-campaign font-display uppercase">{user.reservations.length}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Mis Próximas Clases</h2>
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <h2 className="text-heading-xl font-display uppercase border-b border-hairline pb-4 mb-4">Mis Próximas Clases</h2>
               
               {user.reservations.length > 0 ? (
-                <div className="space-y-4">
+                <div>
                   {user.reservations.map((res) => {
                     const cancelAction = async () => {
                       "use server"
@@ -89,21 +94,21 @@ export default async function DashboardPage() {
                     }
 
                     return (
-                      <div key={res.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition">
+                      <div key={res.id} className="pdp-disclosure-row flex flex-col md:flex-row justify-between items-start md:items-center px-4 hover:bg-soft-cloud transition-colors">
                         <div>
-                          <p className="font-bold text-lg">{res.training.name}</p>
-                          <p className="text-gray-600 text-sm mt-1">
+                          <p className="text-body-strong uppercase">{res.training.name}</p>
+                          <p className="text-body-md text-charcoal mt-1">
                             {res.class.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las {res.class.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
                         
-                        <div className="mt-4 md:mt-0 flex items-center gap-4">
-                          <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        <div className="mt-4 md:mt-0 flex items-center gap-6">
+                          <span className="text-success text-caption-sm font-bold uppercase tracking-wider">
                             Confirmada
                           </span>
                           
                           <form action={cancelAction}>
-                            <button type="submit" className="text-red-500 hover:text-red-700 font-medium text-sm underline transition">
+                            <button type="submit" className="text-sale text-body-strong hover:underline transition">
                               Cancelar reserva
                             </button>
                           </form>
@@ -113,13 +118,13 @@ export default async function DashboardPage() {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-200">
-                  <p className="text-gray-500 font-medium">Aún no tienes reservas activas.</p>
+                <div className="py-12 bg-soft-cloud mt-4 text-center">
+                  <p className="text-body-md text-charcoal">Aún no tienes reservas activas.</p>
                 </div>
               )}
               
-              <div className="mt-6 text-center">
-                <a href="/clases" className="inline-block w-full sm:w-auto bg-black text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition shadow-lg hover:-translate-y-0.5 transform">
+              <div className="mt-8">
+                <a href="/clases" className="button-primary w-full sm:w-auto">
                   Ver horarios y reservar
                 </a>
               </div>
@@ -135,4 +140,4 @@ export default async function DashboardPage() {
       </div>
     </div>
   )
-}
+}

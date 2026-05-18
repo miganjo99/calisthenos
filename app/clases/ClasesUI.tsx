@@ -26,66 +26,65 @@ export default function ClasesUI({ clases, userId }: { clases: any[], userId: st
   const [diaAbierto, setDiaAbierto] = useState<string | null>(diasDisponibles[0] || null)
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Horarios Disponibles</h1>
-        <Link href="/dashboard" className="text-blue-600 hover:underline">Volver a mi perfil</Link>
+    <div className="max-w-4xl mx-auto px-4 sm:px-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-section gap-4 border-b border-hairline pb-4">
+        <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink">Horarios Disponibles</h1>
+        <Link href="/dashboard" className="text-link-md text-ink hover:opacity-70 uppercase tracking-wider">Volver a mi perfil</Link>
       </div>
 
       {diasDisponibles.length === 0 ? (
-        <div className="bg-white p-6 rounded-xl shadow-sm text-center text-gray-500">
-          No hay clases programadas por el momento.
+        <div className="bg-soft-cloud p-12 text-center">
+          <p className="text-body-md text-charcoal">No hay clases programadas por el momento.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-sm">
           {diasDisponibles.map((dia) => (
-            <div key={dia} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+            <div key={dia} className="border-t border-hairline">
               
               <button 
                 onClick={() => setDiaAbierto(diaAbierto === dia ? null : dia)}
-                className="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition"
+                className="w-full py-6 flex justify-between items-center text-ink hover:text-charcoal transition-colors group"
               >
-                <h2 className="text-xl font-bold text-gray-800">{dia}</h2>
-                <span className="text-2xl text-gray-400">
+                <h2 className="text-heading-lg font-display uppercase">{dia}</h2>
+                <span className="text-heading-lg font-display opacity-50 group-hover:opacity-100 transition-opacity">
                   {diaAbierto === dia ? "−" : "+"}
                 </span>
               </button>
 
               {diaAbierto === dia && (
-                <div className="p-4 bg-white divide-y divide-gray-100">
+                <div className="divide-y divide-hairline border-t border-hairline border-b mb-6">
                   {clasesAgrupadas[dia].map((c: any) => {
                     const isReserved = c.reservations.some((r: any) => r.userId === userId)
                     const isFull = c.reservations.length >= c.capacity
                     const hora = new Date(c.date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
 
                     return (
-                      <div key={c.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="bg-black text-white font-bold px-4 py-2 rounded-lg text-lg">
+                      <div key={c.id} className="pdp-disclosure-row hover:bg-soft-cloud px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-colors">
+                        <div className="flex items-center gap-6">
+                          <div className="text-heading-xl font-display text-ink uppercase">
                             {hora}
                           </div>
                           <div>
-                            {/* AHORA INDICAMOS QUE ES UN TRAMO LIBRE */}
-                            <h3 className="text-lg font-bold text-gray-800">Entrenamiento a elegir</h3>
-                            <p className="text-sm text-gray-500">
+                            <h3 className="text-body-strong text-ink uppercase tracking-tight">Entrenamiento Libre</h3>
+                            <p className="text-caption-sm text-mute uppercase mt-1">
                               Plazas ocupadas: {c.reservations.length} / {c.capacity}
                             </p>
                           </div>
                         </div>
 
-                        <div>
+                        <div className="shrink-0">
                           {isReserved ? (
-                            <span className="inline-block bg-green-100 text-green-700 px-6 py-2 rounded-lg font-medium border border-green-200">
+                            <span className="text-success text-body-strong font-display uppercase tracking-widest flex items-center gap-2">
                               Reservado ✓
                             </span>
                           ) : isFull ? (
-                            <span className="inline-block bg-red-100 text-red-700 px-6 py-2 rounded-lg font-medium border border-red-200">
+                            <span className="text-sale text-body-strong font-display uppercase tracking-widest flex items-center gap-2">
                               Completo
                             </span>
                           ) : (
                             <Link 
                               href={`/clases/${c.id}`}
-                              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                              className="button-primary"
                             >
                               Elegir Rutina
                             </Link>

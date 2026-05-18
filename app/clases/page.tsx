@@ -13,22 +13,20 @@ export default async function ClasesPage() {
 
   if (!user.isActive) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md border-t-4 border-blue-600">
-          <span className="text-6xl mb-4 block">💳</span>
-          <h1 className="text-2xl font-black text-gray-800 mb-2">Suscripción Inactiva</h1>
-          <p className="text-gray-600 mb-6 font-medium">
+      <div className="min-h-[calc(100vh-56px)] bg-canvas flex items-center justify-center p-4">
+        <div className="bg-soft-cloud p-12 text-center max-w-md w-full flex flex-col items-center">
+          <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink mb-4">Suscripción Inactiva</h1>
+          <p className="text-body-md text-charcoal mb-8">
             Para poder reservar tus clases y acceder al Open Gym, necesitas una suscripción activa.
           </p>
           
-          <form action={createCheckoutSession}>
-            <button type="submit" className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition shadow-xl hover:-translate-y-1 transform mb-4 flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          <form action={createCheckoutSession} className="w-full">
+            <button type="submit" className="button-primary w-full mb-6">
               Activar mi Suscripción
             </button>
           </form>
 
-          <a href="/dashboard" className="text-gray-500 hover:text-black font-medium transition underline underline-offset-4">
+          <a href="/dashboard" className="text-link-md text-ink uppercase tracking-wider hover:opacity-70">
             Volver a mi perfil
           </a>
         </div>
@@ -43,8 +41,8 @@ export default async function ClasesPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-[calc(100vh-56px)] bg-canvas py-section">
       <ClasesUI clases={clases} userId={user.id} />
     </div>
   )
-}
+}

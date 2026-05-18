@@ -24,60 +24,59 @@ export default async function AdminDashboard() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="bg-canvas py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
+      <div className="max-w-6xl mx-auto space-y-section">
         
-        <div className="bg-black text-white p-8 rounded-xl shadow-lg flex justify-between items-center">
+        <div className="bg-ink text-on-primary p-8 sm:p-12 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-black">Panel de Control</h1>
-            <p className="text-gray-400 mt-2">Bienvenido, {user.name}. Tienes el control total.</p>
+            <h1 className="text-heading-xl font-display uppercase tracking-tighter">Panel de Control</h1>
+            <p className="text-body-md text-stone mt-2 uppercase tracking-wider">Bienvenido, {user.name}. Tienes el control total.</p>
           </div>
         </div>
 
         {/* Estadísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-blue-600">
-            <h3 className="text-lg font-semibold text-gray-700">Usuarios Registrados</h3>
-            <p className="text-4xl font-bold mt-2">{totalUsers}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-sm">
+          <div className="bg-soft-cloud p-8">
+            <h3 className="text-heading-lg mb-2 uppercase">Usuarios Registrados</h3>
+            <p className="text-display-campaign font-display text-ink">{totalUsers}</p>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-green-600">
-            <h3 className="text-lg font-semibold text-gray-700">Clases Futuras</h3>
-            <p className="text-4xl font-bold mt-2">{totalClasses}</p>
+          <div className="bg-soft-cloud p-8">
+            <h3 className="text-heading-lg mb-2 uppercase">Clases Futuras</h3>
+            <p className="text-display-campaign font-display text-ink">{totalClasses}</p>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-purple-600">
-            <h3 className="text-lg font-semibold text-gray-700">Ingresos Mensuales</h3>
-            <p className="text-4xl font-bold mt-2 text-gray-400">Próximamente</p>
+          <div className="bg-soft-cloud p-8">
+            <h3 className="text-heading-lg mb-2 uppercase">Ingresos Mensuales</h3>
+            <p className="text-heading-xl font-display text-mute">Próximamente</p>
           </div>
         </div>
 
         {/* Menú de Gestión */}
-        <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Gestión del Gimnasio</h2>
-          {/* Ajustamos el grid a 3 columnas para que quepan las 3 tarjetas perfectas */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div>
+          <h2 className="text-heading-xl font-display uppercase text-ink mb-6 border-b border-hairline pb-4">Gestión del Gimnasio</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-sm">
             
-            <Link href="/admin/clases" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
+            <Link href="/admin/clases" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
+              <span className="text-heading-xl">📅</span>
               <div>
-                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Gestionar Clases</h3>
-                <p className="text-sm text-gray-500">Modifica horarios y aforos.</p>
+                <h3 className="text-body-strong text-ink uppercase group-hover:underline">Gestionar Clases</h3>
+                <p className="text-caption-sm text-charcoal mt-1">Modifica horarios y aforos.</p>
               </div>
-              <span className="text-3xl">📅</span>
             </Link>
 
-            <Link href="/admin/entrenamientos" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
+            <Link href="/admin/entrenamientos" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
+              <span className="text-heading-xl">💪</span>
               <div>
-                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Tipos de Entrenamiento</h3>
-                <p className="text-sm text-gray-500">Añade rutinas al Open Gym.</p>
+                <h3 className="text-body-strong text-ink uppercase group-hover:underline">Tipos de Entrenamiento</h3>
+                <p className="text-caption-sm text-charcoal mt-1">Añade rutinas al Open Gym.</p>
               </div>
-              <span className="text-3xl">💪</span>
             </Link>
 
-            <Link href="/admin/usuarios" className="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center justify-between group">
+            <Link href="/admin/usuarios" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
+              <span className="text-heading-xl">👥</span>
               <div>
-                <h3 className="font-bold text-gray-600 text-lg group-hover:text-blue-600 transition">Gestión de Clientes</h3>
-                <p className="text-sm text-gray-500">Controla el acceso (Altas y Bajas).</p>
+                <h3 className="text-body-strong text-ink uppercase group-hover:underline">Gestión de Clientes</h3>
+                <p className="text-caption-sm text-charcoal mt-1">Controla el acceso (Altas y Bajas).</p>
               </div>
-              <span className="text-3xl">👥</span>
             </Link>
 
           </div>
@@ -86,4 +85,4 @@ export default async function AdminDashboard() {
       </div>
     </div>
   )
-}
+}

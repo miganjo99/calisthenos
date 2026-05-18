@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { reserveClass } from "@/actions/reserve"
+import Link from "next/link"
 
 export default async function ClaseDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
@@ -12,7 +13,7 @@ export default async function ClaseDetallePage({ params }: { params: Promise<{ i
 
   const { id } = await params
 
-  // 1. Buscamos el tramo horario y las reservas (ahora incluyendo qué rutina eligió cada usuario)
+  // 1. Buscamos el tramo horario y las reservas
   const gymClass = await prisma.class.findUnique({
     where: { id: id },
     include: {
@@ -27,80 +28,78 @@ export default async function ClaseDetallePage({ params }: { params: Promise<{ i
 
   if (!gymClass) redirect("/clases")
 
-  // 2. Traemos TODAS las rutinas disponibles para que el usuario pueda elegir
+  // 2. Traemos TODAS las rutinas disponibles
   const trainings = await prisma.training.findMany({
     orderBy: { name: 'asc' }
   })
 
-  // 3. Comprobamos el estado del usuario actual
+  // 3. Comprobamos el estado
   const userReservation = gymClass.reservations.find(r => r.userId === user.id)
   const isReserved = !!userReservation
   const isFull = gymClass.reservations.length >= gymClass.capacity
 
-  // 4. Nueva acción de reserva que lee el formulario
+  // 4. Nueva acción de reserva
   const reserveAction = async (formData: FormData) => {
     "use server"
     const trainingId = formData.get("trainingId") as string
     if (!trainingId) return
-    // Pasamos el ID de la clase y el ID del entrenamiento elegido
     await reserveClass(gymClass.id, trainingId)
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="bg-canvas py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
+      <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Cabecera del Tramo Horario */}
-        <div className="bg-white p-8 rounded-xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-hairline pb-section gap-6">
           <div>
-            <span className="bg-black text-white px-3 py-1 rounded-full text-sm font-bold tracking-wide uppercase">
+            <span className="bg-ink text-on-primary px-3 py-1 text-utility-xs uppercase tracking-widest font-display">
               Entrenamiento Libre
             </span>
-            <h1 className="text-3xl font-bold text-gray-800 mt-4">
+            <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink mt-4">
               {gymClass.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} h
             </h1>
-            <p className="text-gray-600 mt-1 text-lg">
+            <p className="text-body-md text-charcoal mt-1 uppercase tracking-wider">
               {gymClass.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
           </div>
-          <a href="/clases" className="text-blue-600 hover:underline font-medium">Volver a horarios</a>
+          <Link href="/clases" className="text-link-md text-ink uppercase tracking-wider hover:opacity-70">Volver a horarios</Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           
           {/* Columna Izquierda: Formulario de Reserva */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border-t-4 border-black">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Confirma tu asistencia</h2>
+          <div>
+            <h2 className="text-heading-lg font-display uppercase text-ink mb-6 border-b border-hairline pb-4">Confirma tu asistencia</h2>
             
-            <div className="mb-6">
-              <p className="text-sm font-medium text-gray-500 mb-1">Ocupación actual</p>
-              <div className="flex items-end gap-2">
-                <span className="text-3xl font-black text-gray-800">{gymClass.reservations.length}</span>
-                <span className="text-lg text-gray-500 mb-1">/ {gymClass.capacity} plazas</span>
+            <div className="mb-8">
+              <p className="text-caption-sm text-mute uppercase tracking-widest mb-1">Ocupación actual</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-display-campaign font-display text-ink">{gymClass.reservations.length}</span>
+                <span className="text-heading-md font-display text-stone">/ {gymClass.capacity}</span>
               </div>
             </div>
 
-            <form action={reserveAction} className="space-y-6">
-              {/* Si YA está reservado, mostramos su elección */}
+            <form action={reserveAction} className="space-y-8">
               {isReserved ? (
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <p className="font-bold text-green-800 mb-1">¡Plaza reservada! ✓</p>
-                  <p className="text-sm text-green-700">Vas a entrenar: <strong>{userReservation.training.name}</strong></p>
+                <div className="bg-soft-cloud p-6 border-l-4 border-success">
+                  <p className="text-heading-md font-display uppercase text-success mb-2 tracking-widest">¡Plaza reservada! ✓</p>
+                  <p className="text-body-md text-ink">Vas a entrenar: <strong>{userReservation.training.name}</strong></p>
                 </div>
               ) : isFull ? (
-                <div className="bg-red-50 p-4 rounded-lg border border-red-200 text-center text-red-700 font-bold">
-                  Este tramo horario está completo
+                <div className="bg-soft-cloud p-6 border-l-4 border-sale">
+                  <p className="text-heading-md font-display uppercase text-sale tracking-widest">Este tramo horario está completo</p>
                 </div>
               ) : (
                 <>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                    <label className="block text-body-strong text-ink mb-4 uppercase">
                       ¿Qué rutina vas a hacer hoy?
                     </label>
                     <select 
                       name="trainingId" 
                       required
-                      className="w-full border-gray-300 border rounded-lg p-3 text-gray-800 bg-gray-50 focus:ring-2 focus:ring-black outline-none transition"
+                      className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-4 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition cursor-pointer appearance-none"
                     >
                       <option value="">-- Selecciona un entrenamiento --</option>
                       {trainings.map(t => (
@@ -111,7 +110,7 @@ export default async function ClaseDetallePage({ params }: { params: Promise<{ i
                     </select>
                   </div>
 
-                  <button type="submit" className="w-full bg-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition shadow-lg">
+                  <button type="submit" className="button-primary w-full py-4 text-heading-md uppercase tracking-wider">
                     Confirmar Plaza y Rutina
                   </button>
                 </>
@@ -120,21 +119,23 @@ export default async function ClaseDetallePage({ params }: { params: Promise<{ i
           </div>
 
           {/* Columna Derecha: Compañeros y sus rutinas */}
-          <div className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Compañeros en esta hora</h2>
+          <div>
+            <h2 className="text-heading-lg font-display uppercase text-ink mb-6 border-b border-hairline pb-4">Compañeros en esta hora</h2>
             
             {gymClass.reservations.length > 0 ? (
-              <div className="space-y-4">
+              <div className="divide-y divide-hairline">
                 {gymClass.reservations.map((res) => (
-                  <div key={res.id} className="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  <div key={res.id} className="py-4 flex items-center gap-4">
                     {res.user.avatarUrl ? (
-                       <img src={res.user.avatarUrl} alt={res.user.name} className="w-12 h-12 rounded-full bg-white border shadow-sm" />
+                       <img src={res.user.avatarUrl} alt={res.user.name} className="w-12 h-12 rounded-none bg-soft-cloud object-cover" />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-gray-300"></div>
+                      <div className="w-12 h-12 rounded-none bg-soft-cloud flex items-center justify-center text-ink font-display text-heading-md uppercase">
+                        {res.user.name.charAt(0)}
+                      </div>
                     )}
                     <div>
-                      <p className="font-bold text-gray-800">{res.user.name.split(' ')[0]}</p>
-                      <p className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded mt-1 inline-block">
+                      <p className="text-body-strong text-ink uppercase tracking-tight">{res.user.name.split(' ')[0]}</p>
+                      <p className="text-caption-sm text-mute uppercase tracking-widest mt-1">
                         {res.training.name}
                       </p>
                     </div>
@@ -142,9 +143,8 @@ export default async function ClaseDetallePage({ params }: { params: Promise<{ i
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <span className="text-4xl">🤸‍♂️</span>
-                <p className="text-gray-500 mt-4 font-medium">Nadie se ha apuntado aún.<br/>¡Sé el primero en abrir el gimnasio!</p>
+              <div className="py-12 bg-soft-cloud text-center mt-4">
+                <p className="text-body-md text-charcoal">Nadie se ha apuntado aún.<br/>¡Sé el primero en abrir el gimnasio!</p>
               </div>
             )}
           </div>

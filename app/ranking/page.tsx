@@ -2,83 +2,80 @@ import prisma from "@/lib/prisma"
 import Link from "next/link"
 
 export default async function RankingPage() {
-  // Traemos a los 10 mejores usuarios (activos y que no sean admin)
   const topUsers = await prisma.user.findMany({
     where: { 
       role: "user", 
       isActive: true,
-      daysTrained: { gt: 0 } // Solo mostramos a los que han entrenado al menos 1 día
+      daysTrained: { gt: 0 } 
     },
     orderBy: { daysTrained: 'desc' },
     take: 10
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <div className="bg-canvas text-ink py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
+      <div className="max-w-3xl mx-auto space-y-12">
         
         {/* Cabecera del Ranking */}
         <div className="text-center">
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">
-            Muro de la <span className="text-blue-600">Fama</span>
+          <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink">
+            Muro de la Fama
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
-            Los atletas más constantes de CaliGym. ¡Cada día cuenta!
+          <p className="mt-2 text-body-md text-charcoal max-w-lg mx-auto">
+            Los atletas más constantes. Cada día cuenta.
           </p>
         </div>
 
         {/* Lista del Ranking */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-canvas border-t border-hairline">
           {topUsers.length > 0 ? (
-            <ul className="divide-y divide-gray-100">
+            <ul>
               {topUsers.map((user, index) => {
-                // Asignamos medallas a los 3 primeros
-                let badge = <span className="text-gray-400 font-bold text-lg">#{index + 1}</span>
-                if (index === 0) badge = <span className="text-4xl" title="Oro">🥇</span>
-                if (index === 1) badge = <span className="text-4xl" title="Plata">🥈</span>
-                if (index === 2) badge = <span className="text-4xl" title="Bronce">🥉</span>
-
+                const rank = index + 1;
+                const isTop3 = rank <= 3;
+                
                 return (
-                  <li key={user.id} className="flex items-center justify-between p-6 hover:bg-gray-50 transition">
+                  <li key={user.id} className="pdp-disclosure-row hover:bg-soft-cloud px-4 transition-colors">
                     <div className="flex items-center gap-6">
-                      <div className="w-12 text-center flex justify-center">
-                        {badge}
+                      <div className="w-8 text-center flex justify-center">
+                        <span className={`text-heading-lg font-display ${isTop3 ? 'text-ink' : 'text-stone'}`}>
+                          {rank}
+                        </span>
                       </div>
                       
                       <div className="flex items-center gap-4">
                         {user.avatarUrl ? (
-                          <img src={user.avatarUrl} alt={user.name} className="w-14 h-14 rounded-full border-2 border-gray-100 object-cover" />
+                          <img src={user.avatarUrl} alt={user.name} className="w-12 h-12 rounded-sm object-cover bg-soft-cloud" />
                         ) : (
-                          <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-100 to-blue-50 border-2 border-white shadow-sm flex items-center justify-center text-blue-600 font-bold text-xl">
-                            {user.name.charAt(0).toUpperCase()}
+                          <div className="w-12 h-12 rounded-sm bg-soft-cloud flex items-center justify-center text-ink text-heading-md font-display uppercase">
+                            {user.name.charAt(0)}
                           </div>
                         )}
                         <div>
-                          <p className="text-lg font-bold text-gray-900">{user.name}</p>
-                          <p className="text-sm text-gray-500 font-medium">Atleta activo</p>
+                          <p className="text-body-strong text-ink uppercase tracking-tight">{user.name}</p>
+                          <p className="text-caption-sm text-mute uppercase tracking-wider mt-1">Atleta</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="text-right">
-                      <p className="text-3xl font-black text-blue-600">{user.daysTrained}</p>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Entrenos</p>
+                      <p className="text-heading-xl font-display text-ink leading-none">{user.daysTrained}</p>
+                      <p className="text-utility-xs text-mute uppercase mt-1">Entrenos</p>
                     </div>
                   </li>
                 )
               })}
             </ul>
           ) : (
-            <div className="p-12 text-center">
-              <span className="text-6xl mb-4 block">🏋️‍♂️</span>
-              <h3 className="text-xl font-bold text-gray-800">El podio está vacío</h3>
-              <p className="text-gray-500 mt-2">Aún no hay atletas con entrenamientos completados.</p>
+            <div className="py-24 text-center">
+              <h3 className="text-heading-lg text-ink uppercase font-display">El podio está vacío</h3>
+              <p className="text-body-md text-charcoal mt-2">Aún no hay atletas con entrenamientos completados.</p>
             </div>
           )}
         </div>
 
-        <div className="text-center mt-8">
-          <Link href="/clases" className="inline-block bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition shadow-lg hover:-translate-y-0.5 transform">
+        <div className="text-center pt-8">
+          <Link href="/clases" className="button-primary">
             Sumar mi próximo entreno
           </Link>
         </div>
@@ -86,4 +83,4 @@ export default async function RankingPage() {
       </div>
     </div>
   )
-}
+}

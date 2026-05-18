@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
+import Link from "next/link"
 
 export default async function AdminClasesPage() {
   const session = await auth()
@@ -54,72 +55,72 @@ export default async function AdminClasesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="bg-canvas py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
+      <div className="max-w-6xl mx-auto space-y-8">
         
-        <div className="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-hairline pb-section gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Gestión de Tramos Horarios</h1>
-            <p className="text-gray-500">Modifica el aforo o cancela horarios (Open Gym).</p>
+            <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink">Gestión de Tramos Horarios</h1>
+            <p className="text-body-md text-charcoal mt-2">Modifica el aforo o cancela horarios (Open Gym).</p>
           </div>
-          <a href="/admin" className="text-blue-600 hover:underline font-medium">Volver al Panel</a>
+          <Link href="/admin" className="text-link-md text-ink hover:opacity-70 uppercase tracking-wider">Volver al Panel</Link>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-canvas border border-hairline">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-black text-white text-sm">
-                  <th className="p-4 font-semibold">Fecha y Hora</th>
-                  <th className="p-4 font-semibold">Plazas (Ocupadas / Total)</th>
-                  <th className="p-4 font-semibold text-right">Acciones</th>
+                <tr className="bg-ink text-on-primary text-utility-xs uppercase tracking-widest border-b border-hairline">
+                  <th className="p-4 font-display">Fecha y Hora</th>
+                  <th className="p-4 font-display">Plazas (Ocupadas / Total)</th>
+                  <th className="p-4 font-display text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-hairline">
                 {clases.map((c) => (
-                  <tr key={c.id} className="hover:bg-gray-50 transition">
+                  <tr key={c.id} className="hover:bg-soft-cloud transition-colors">
                     
                     {/* Fecha y Hora */}
-                    <td className="p-4">
-                      <p className="font-bold text-gray-800">
+                    <td className="p-4 align-middle">
+                      <p className="text-body-strong text-ink uppercase">
                         {c.date.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short' }).toUpperCase()}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-caption-sm text-charcoal uppercase mt-1">
                         {c.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} h
                       </p>
                     </td>
 
                     {/* Formulario de Aforo */}
-                    <td className="p-4">
-                      <form action={updateClass} className="flex items-center gap-4">
+                    <td className="p-4 align-middle">
+                      <form action={updateClass} className="flex flex-wrap items-center gap-4">
                         <input type="hidden" name="classId" value={c.id} />
                         
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-gray-500">{c.reservations.length} /</span>
+                          <span className="text-body-strong text-charcoal">{c.reservations.length} /</span>
                           <input 
                             type="number" 
                             name="capacity" 
                             defaultValue={c.capacity} 
                             min={c.reservations.length} 
-                            className="border rounded-md p-2 w-20 text-gray-500 text-center font-bold focus:ring-2 focus:ring-black outline-none"
+                            className="bg-transparent border border-hairline rounded-none p-2 w-20 text-ink text-center font-bold focus:ring-2 focus:ring-ink outline-none"
                           />
                         </div>
 
-                        <button type="submit" className="text-xs bg-blue-100 text-blue-700 font-bold px-3 py-2 rounded hover:bg-blue-200 transition">
+                        <button type="submit" className="button-secondary px-4 py-2 text-utility-xs uppercase tracking-widest">
                           Guardar Aforo
                         </button>
                       </form>
                     </td>
 
                     {/* Botón de Cancelar Hora */}
-                    <td className="p-4 text-right">
+                    <td className="p-4 text-right align-middle">
                       <form action={deleteClass}>
                         <input type="hidden" name="classId" value={c.id} />
                         <button 
                           type="submit" 
-                          className="text-xs bg-red-100 text-red-700 font-bold px-3 py-2 rounded hover:bg-red-200 transition"
+                          className="button-secondary px-4 py-2 text-sale text-utility-xs uppercase tracking-widest hover:bg-sale hover:text-on-primary border-sale"
                         >
-                          Eliminar Hora
+                          Eliminar
                         </button>
                       </form>
                     </td>
@@ -129,7 +130,7 @@ export default async function AdminClasesPage() {
 
                 {clases.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="p-8 text-center text-gray-500">
+                    <td colSpan={3} className="p-12 text-center text-charcoal text-body-md">
                       No hay horarios programados. Recuerda que se generan automáticamente.
                     </td>
                   </tr>

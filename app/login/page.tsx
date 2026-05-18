@@ -44,8 +44,9 @@ export default function LoginPage() {
     if (result?.error) {
       setErrorMsg('Error al conectar con el servidor.')
     } else {
-      router.refresh()
-      router.push('/dashboard')
+      // router.refresh()
+      // router.push('/dashboard')
+      window.location.href = '/dashboard'
     }
     setIsLoading(false)
   }

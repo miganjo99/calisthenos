@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import prisma from "@/lib/prisma"
 import { cancelReservation } from "@/actions/reserve"
 import SessionRefresher from "@/components/SessionRefresher"
+import RankingWidget from "@/components/RankingWidget" 
+
 export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.email) redirect("/login")
@@ -39,7 +41,6 @@ export default async function DashboardPage() {
       <SessionRefresher />
       <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* Cabecera del Perfil */}
         <div className="bg-white p-6 rounded-xl shadow-sm flex items-center justify-between">
           <div className="flex items-center gap-4">
             {user.avatarUrl ? (
@@ -61,7 +62,6 @@ export default async function DashboardPage() {
           </form>
         </div>
 
-        {/* Tarjetas Principales */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-black">
             <h3 className="text-lg font-semibold text-gray-700">Días Entrenados</h3>
@@ -74,51 +74,62 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Lista de Próximas Clases */}
-        <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Mis Próximas Clases</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          {user.reservations.length > 0 ? (
-            <div className="space-y-4">
-              {user.reservations.map((res) => {
-                const cancelAction = async () => {
-                  "use server"
-                  await cancelReservation(res.id)
-                }
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Mis Próximas Clases</h2>
+              
+              {user.reservations.length > 0 ? (
+                <div className="space-y-4">
+                  {user.reservations.map((res) => {
+                    const cancelAction = async () => {
+                      "use server"
+                      await cancelReservation(res.id)
+                    }
 
-                return (
-                  <div key={res.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <p className="font-bold text-lg">{res.training.name}</p>
-                      <p className="text-gray-600">
-                        {res.class.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las {res.class.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
-                    
-                    <div className="mt-4 md:mt-0 flex items-center gap-4">
-                      <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
-                        Confirmada
-                      </span>
-                      
-                      <form action={cancelAction}>
-                        <button type="submit" className="text-red-500 hover:text-red-700 font-medium text-sm underline transition">
-                          Cancelar reserva
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                )
-              })}
+                    return (
+                      <div key={res.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition">
+                        <div>
+                          <p className="font-bold text-lg">{res.training.name}</p>
+                          <p className="text-gray-600 text-sm mt-1">
+                            {res.class.date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las {res.class.date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
+                        
+                        <div className="mt-4 md:mt-0 flex items-center gap-4">
+                          <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                            Confirmada
+                          </span>
+                          
+                          <form action={cancelAction}>
+                            <button type="submit" className="text-red-500 hover:text-red-700 font-medium text-sm underline transition">
+                              Cancelar reserva
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                  <p className="text-gray-500 font-medium">Aún no tienes reservas activas.</p>
+                </div>
+              )}
+              
+              <div className="mt-6 text-center">
+                <a href="/clases" className="inline-block w-full sm:w-auto bg-black text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition shadow-lg hover:-translate-y-0.5 transform">
+                  Ver horarios y reservar
+                </a>
+              </div>
             </div>
-          ) : (
-            <p className="text-gray-500 text-center py-4">Aún no tienes reservas activas. ¡Anímate a entrenar!</p>
-          )}
-          
-          <div className="mt-6 text-center">
-            <a href="/clases" className="inline-block bg-black text-white font-bold py-2 px-6 rounded-md hover:bg-gray-800 transition">
-              Ver horarios y reservar
-            </a>
           </div>
+
+          <div className="lg:col-span-1">
+            <RankingWidget />
+          </div>
+
         </div>
 
       </div>

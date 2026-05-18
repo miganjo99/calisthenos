@@ -6,13 +6,13 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      
+
       <section className="bg-gradient-to-b from-black to-gray-900 text-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/20 blur-[100px] rounded-full pointer-events-none"></div>
-        
+
         <div className="max-w-4xl mx-auto relative z-10">
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight mb-6">
-            Domina tu cuerpo.<br/>
+            Domina tu cuerpo.<br />
             <span className="text-blue-500 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
               Eleva tu límite.
             </span>
@@ -20,7 +20,7 @@ export default async function Home() {
           <p className="text-xl sm:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto font-light">
             Únete al mejor centro de calistenia. Entrenamiento libre guiado, grupos reducidos y una comunidad que te empuja a ser mejor cada día.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             {session?.user ? (
               <>
@@ -55,7 +55,7 @@ export default async function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          
+
           <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition text-center group">
             <div className="w-16 h-16 bg-black text-white rounded-2xl flex items-center justify-center text-2xl font-black mx-auto mb-6 transform group-hover:-rotate-6 transition">
               1

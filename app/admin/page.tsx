@@ -9,8 +9,8 @@ export default async function AdminDashboard() {
   if (!session?.user?.email) redirect("/login")
 
   // 1. Buscamos al usuario en la base de datos
-  const user = await prisma.user.findUnique({ 
-    where: { email: session.user.email } 
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email }
   })
 
   // solo admin
@@ -27,7 +27,7 @@ export default async function AdminDashboard() {
   return (
     <div className="bg-canvas py-section px-4 sm:px-8 max-w-[1440px] mx-auto min-h-[calc(100vh-56px)]">
       <div className="max-w-6xl mx-auto space-y-section">
-        
+
         <div className="bg-ink text-on-primary p-8 sm:p-12 flex justify-between items-center">
           <div>
             <h1 className="text-heading-xl font-display uppercase tracking-tighter">Panel de Control</h1>
@@ -55,10 +55,10 @@ export default async function AdminDashboard() {
         <div>
           <h2 className="text-heading-xl font-display uppercase text-ink mb-6 border-b border-hairline pb-4">Gestión del Gimnasio</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-sm">
-            
+
             <Link href="/admin/clases" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
               <span className="text-heading-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-cog">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-calendar-cog">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                   <path d="M12 21h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5" />
                   <path d="M16 3v4" />
@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
                   <path d="M20.733 20l1.3 .75" />
                 </svg>
               </span>
-              
+
               <div>
                 <h3 className="text-body-strong text-ink uppercase group-hover:underline">Gestionar Clases</h3>
                 <p className="text-caption-sm text-charcoal mt-1">Modifica horarios y aforos.</p>
@@ -82,7 +82,7 @@ export default async function AdminDashboard() {
 
             <Link href="/admin/entrenamientos" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
               <span className="text-heading-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-treadmill">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-treadmill">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                   <path d="M10 3a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
                   <path d="M3 14l4 1l.5 -.5" />
@@ -100,7 +100,7 @@ export default async function AdminDashboard() {
 
             <Link href="/admin/usuarios" className="p-8 border border-hairline hover:bg-soft-cloud transition-colors flex flex-col justify-between group h-full gap-4">
               <span className="text-heading-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-user">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                   <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
                   <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />

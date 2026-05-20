@@ -9,9 +9,9 @@ export default async function Home() {
 
       {/* HERO SECTION - Campaign Tile */}
       <section className="campaign-tile h-[80vh] flex items-end">
-        {/* Placeholder for editorial photography */}
-        <div className="absolute inset-0 bg-ink">
-           {/* In a real scenario, an img tag would go here. We leave it solid ink. */}
+        {/* Background Graphic */}
+        <div className="absolute inset-0 bg-ink flex justify-center items-center overflow-hidden">
+           <img src="logo.png" alt="Calisthenos logo" className="w-full h-full object-cover opacity-20 mix-blend-screen max-w-8xl" />
         </div>
 
         <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pb-12 sm:pb-24">

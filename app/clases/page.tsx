@@ -13,8 +13,8 @@ export default async function ClasesPage() {
 
   if (!user.isActive) {
     return (
-      <div className="min-h-[calc(100vh-56px)] bg-canvas flex items-center justify-center p-4">
-        <div className="bg-soft-cloud p-12 text-center max-w-md w-full flex flex-col items-center">
+      <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-canvas py-12 px-4 sm:px-8">
+        <div className="w-full max-w-[480px] sm:border sm:border-hairline sm:p-12 text-center flex flex-col items-center">
           <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink mb-4">Suscripción Inactiva</h1>
           <p className="text-body-md text-charcoal mb-8">
             Para poder reservar tus clases y acceder al Open Gym, necesitas una suscripción activa.

@@ -39,8 +39,12 @@ export default function NavbarClient({ isLoggedIn, isAdmin, logoutAction }: Navb
 
           {/* LOGO */}
           <div className="flex-shrink-0 flex items-center justify-center sm:justify-start flex-1 sm:flex-none">
-            <Link href="/" onClick={closeMenu} className="font-display font-black text-2xl uppercase tracking-tighter hover:opacity-70 transition">
-              Calisthenos
+            <Link href="/" onClick={closeMenu} className="hover:opacity-70 transition flex items-center gap-3">
+              <img src="/logo.png" alt="Calisthenos Logo" className="h-10 w-auto invert mix-blend-multiply" />
+              <span className="font-display font-black text-2xl uppercase tracking-tighter hidden sm:inline-block">
+              <img src="/calisthenos.png" alt="Calisthenos Font" className="h-15 w-auto  mix-blend-multiply" />
+                
+              </span>
             </Link>
           </div>
 

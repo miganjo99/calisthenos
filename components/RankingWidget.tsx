@@ -23,9 +23,10 @@ export default async function RankingWidget() {
         <ul className="flex flex-col">
           {topUsers.map((user, index) => {
             const rank = index + 1;
-            const isTop3 = rank <= 3;
+            const isTop3 = rank <= 3 ;
 
             return (
+              // console.log("User:", user),
               <li key={user.id} className="flex items-center justify-between py-4 px-4 border-b border-hairline hover:bg-soft-cloud transition-colors">
                 <div className="flex items-center gap-4">
                   <div className="w-6 text-center">
@@ -63,4 +64,4 @@ export default async function RankingWidget() {
       )}
     </div>
   )
-}
+}

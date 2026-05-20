@@ -17,11 +17,11 @@ export default async function RankingPage() {
       <div className="max-w-3xl mx-auto space-y-12">
         
         {/* Cabecera del Ranking */}
-        <div className="text-center">
+        <div>
           <h1 className="text-heading-xl font-display uppercase tracking-tighter text-ink">
             Muro de la Fama
           </h1>
-          <p className="mt-2 text-body-md text-charcoal max-w-lg mx-auto">
+          <p className="mt-2 text-body-md text-charcoal max-w-2xl">
             Los atletas más constantes. Cada día cuenta.
           </p>
         </div>
@@ -29,6 +29,7 @@ export default async function RankingPage() {
         {/* Lista del Ranking */}
         <div className="bg-canvas border-t border-hairline">
           {topUsers.length > 0 ? (
+            // console.log("Top Users:", topUsers),
             <ul>
               {topUsers.map((user, index) => {
                 const rank = index + 1;
@@ -83,4 +84,4 @@ export default async function RankingPage() {
       </div>
     </div>
   )
-}
+}

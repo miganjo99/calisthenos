@@ -13,6 +13,8 @@ export default function LoginPage() {
   const [successMsg, setSuccessMsg] = useState('')
   const [lockedEmail, setLockedEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
 
   async function handleLogin(formData: FormData) {
     setIsLoading(true)
@@ -90,7 +92,16 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="block text-body-strong text-ink mb-2">Contraseña</label>
-                <input type="password" name="password" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
+                <div className="relative">
+                  <input type={showPassword ? "text" : "password"} name="password" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal hover:text-ink transition-colors">
+                    {showPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" /><path d="M3 15l2.5 -3.8" /><path d="M21 14.976l-2.492 -3.776" /><path d="M9 17l.5 -4" /><path d="M15 17l-.5 -4" /></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                    )}
+                  </button>
+                </div>
               </div>
               <button disabled={isLoading} type="submit" className="button-primary w-full mt-6">
                 {isLoading ? 'Comprobando...' : 'Entrar al Gimnasio'}
@@ -113,7 +124,16 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="block text-body-strong text-ink mb-2">Nueva Contraseña</label>
-                <input type="password" name="newPassword" placeholder="1 Mayúscula, mín. 6 caracteres" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
+                <div className="relative">
+                  <input type={showNewPassword ? "text" : "password"} name="newPassword" placeholder="1 Mayúscula, mín. 6 caracteres" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" />
+                  <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal hover:text-ink transition-colors">
+                    {showNewPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" /><path d="M3 15l2.5 -3.8" /><path d="M21 14.976l-2.492 -3.776" /><path d="M9 17l.5 -4" /><path d="M15 17l-.5 -4" /></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+                    )}
+                  </button>
+                </div>
               </div>
               <button disabled={isLoading} type="submit" className="button-primary w-full mt-6 bg-sale text-on-primary hover:opacity-90">
                 {isLoading ? 'Actualizando...' : 'Guardar y Desbloquear'}

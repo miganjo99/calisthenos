@@ -117,15 +117,15 @@ export default function LoginPage() {
           <>
             <h1 className="text-heading-lg font-display uppercase tracking-tighter text-center mb-4 text-ink">Recuperar Cuenta</h1>
             <p className="text-center text-body-md text-charcoal mb-8">Revisa tu correo ({lockedEmail}) e introduce el código de 6 dígitos para crear tu nueva contraseña.</p>
-            <form action={handleRecovery} className="space-y-4">
+            <form action={handleRecovery} className="space-y-4" autoComplete="off">
               <div>
                 <label className="block text-body-strong text-ink mb-2">Código de seguridad</label>
-                <input type="text" name="code" required placeholder="Ej: 123456" className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition tracking-widest text-center" />
+                <input type="text" name="code" autoComplete="one-time-code" required placeholder="Ej: 123456" className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition tracking-widest text-center" />
               </div>
               <div>
                 <label className="block text-body-strong text-ink mb-2">Nueva Contraseña</label>
                 <div className="relative">
-                  <input type={showNewPassword ? "text" : "password"} name="newPassword" placeholder="1 Mayúscula, mín. 6 caracteres" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" />
+                  <input type={showNewPassword ? "text" : "password"} name="newPassword" placeholder="1 Mayúscula, mín. 6 caracteres" autoComplete="new-password" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" />
                   <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal hover:text-ink transition-colors">
                     {showNewPassword ? (
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" /><path d="M3 15l2.5 -3.8" /><path d="M21 14.976l-2.492 -3.776" /><path d="M9 17l.5 -4" /><path d="M15 17l-.5 -4" /></svg>

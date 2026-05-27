@@ -31,7 +31,7 @@ export async function registerUser(formData: FormData) {
         email,
         password: hashedPassword,
         avatarUrl,
-        isActive: false, 
+        isActive: false,
       }
     })
     return { success: true, user: newUser }
@@ -45,6 +45,12 @@ export async function preCheckLogin(email: string, pass: string) {
   if (!user) return { error: 'Credenciales inválidas' }
 
   if (user.failedAttempts >= 3) {
+    let code = user.recoveryCode
+    if (!code) {
+      code = Math.floor(100000 + Math.random() * 900000).toString()
+      await prisma.user.update({ where: { email }, data: { recoveryCode: code } })
+    }
+    console.log(`🔑 [RECUPERACIÓN] La cuenta ${email} ya está bloqueada. Código actual: ${code}`);
     return { locked: true, error: 'Tu cuenta está bloqueada. Revisa tu correo para recuperarla.' }
   }
 
@@ -59,19 +65,26 @@ export async function preCheckLogin(email: string, pass: string) {
       const code = Math.floor(100000 + Math.random() * 900000).toString()
       await prisma.user.update({ where: { email }, data: { recoveryCode: code } })
 
-      await resend.emails.send({
-        from: 'Calisthenos <onboarding@resend.dev>',
-        to: email,
-        subject: '⚠️ Alerta de Seguridad y Recuperación de Contraseña',
-        html: `
-          <h3>Alerta de Seguridad</h3>
-          <p>Hemos detectado 3 intentos fallidos de inicio de sesión en tu cuenta.</p>
-          <p>Para recuperar tu acceso, usa este código de seguridad: <strong style="font-size:24px;">${code}</strong></p>
-        `
-      })
+      console.log(`🔑 [RECUPERACIÓN] Código generado para ${email}: ${code}`);
+
+      try {
+        await resend.emails.send({
+          from: 'Calisthenos <onboarding@resend.dev>',
+          to: email,
+          subject: '⚠️ Alerta de Seguridad y Recuperación de Contraseña',
+          html: `
+            <h3>Alerta de Seguridad</h3>
+            <p>Hemos detectado 3 intentos fallidos de inicio de sesión en tu cuenta.</p>
+            <p>Para recuperar tu acceso, usa este código de seguridad: <strong style="font-size:24px;">${code}</strong></p>
+          `
+        })
+      } catch (emailError) {
+        console.error("⚠️ Error enviando el correo de recuperación con Resend:", emailError)
+      }
+
       return { locked: true, error: 'Has fallado 3 veces. Te hemos enviado un código al correo para recuperar tu cuenta.' }
     }
-    
+
     return { error: `Contraseña incorrecta. Te quedan ${3 - updated.failedAttempts} intentos.` }
   }
 

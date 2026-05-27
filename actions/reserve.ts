@@ -56,7 +56,7 @@ export async function reserveClass(classId: string, trainingId: string) {
     })
 
     await resend.emails.send({
-      from: 'Calisthenos <onboarding@resend.dev>', 
+      from: process.env.RESEND_FROM_EMAIL || 'Calisthenos <onboarding@resend.dev>', 
       to: user.email, 
       subject: '¡Plaza reservada con éxito! 💪',
       html: `

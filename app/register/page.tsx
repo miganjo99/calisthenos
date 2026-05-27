@@ -47,15 +47,15 @@ export default function RegisterPage() {
           Únete al Gimnasio
         </h1>
         
-        <form action={handleSubmit} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4" autoComplete="off">
           <div>
             <label className="block text-body-strong text-ink mb-2">Nombre completo</label>
-            <input type="text" name="name" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
+            <input type="text" name="name" autoComplete="off" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
           </div>
           
           <div>
             <label className="block text-body-strong text-ink mb-2">Correo electrónico</label>
-            <input type="email" name="email" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
+            <input type="email" name="email" autoComplete="new-username" required className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition" />
           </div>
 
           <div>
@@ -65,6 +65,7 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"} 
                 name="password" 
                 placeholder="Mín. 6 caracteres y 1 Mayúscula"
+                autoComplete="new-password"
                 required 
                 className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" 
               />
@@ -85,6 +86,7 @@ export default function RegisterPage() {
                 type={showConfirmPassword ? "text" : "password"} 
                 name="confirmPassword" 
                 placeholder="Repite tu contraseña"
+                autoComplete="new-password"
                 required 
                 className="w-full bg-soft-cloud text-ink text-body-md rounded-md px-4 py-3 outline-none border border-transparent focus:bg-canvas focus:ring-2 focus:ring-ink focus:ring-offset-[12px] focus:ring-offset-soft-cloud transition pr-12" 
               />
